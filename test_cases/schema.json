@@ -1,0 +1,117 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "max_time_steps": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Maximum number of time steps for the simulation"
+        },
+        "description": {
+          "type": "string",
+          "description": "Human-readable description of the test case"
+        }
+      },
+      "required": ["max_time_steps"]
+    },
+    "fulfillment_centers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier for the FC"
+          },
+          "name": {
+            "type": "string",
+            "description": "Human-readable name for the FC"
+          }
+        },
+        "required": ["id"]
+      }
+    },
+    "connections": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "from_fc": {
+            "type": "string",
+            "description": "ID of the source FC"
+          },
+          "to_fc": {
+            "type": "string",
+            "description": "ID of the destination FC"
+          },
+          "base_weight": {
+            "type": "number",
+            "minimum": 0,
+            "description": "Base weight/length of the connection (time steps required to traverse)"
+          },
+          "bandwidth": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Maximum number of packages that can enter this connection per time step (unlimited if not specified)"
+          },
+          "weight_changes": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "time_step": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "description": "Time step when the weight change occurs"
+                },
+                "new_weight": {
+                  "type": "number",
+                  "minimum": 0,
+                  "description": "New weight value"
+                },
+                "duration": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "description": "Duration of this weight change in time steps (permanent if not specified)"
+                }
+              },
+              "required": ["time_step", "new_weight"]
+            },
+            "description": "Schedule of weight changes over time"
+          }
+        },
+        "required": ["from_fc", "to_fc", "base_weight"]
+      }
+    },
+    "packages": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier for the package"
+          },
+          "source_fc": {
+            "type": "string",
+            "description": "ID of the source FC"
+          },
+          "destination_fc": {
+            "type": "string",
+            "description": "ID of the destination FC"
+          },
+          "entry_time": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Time step when the package enters the system"
+          }
+        },
+        "required": ["id", "source_fc", "destination_fc", "entry_time"]
+      }
+    }
+  },
+  "required": ["fulfillment_centers", "connections", "packages"]
+}

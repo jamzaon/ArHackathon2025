@@ -20,10 +20,8 @@ ar_hackathon/
 │   │   └── game_engine.py         # Main game engine implementation
 │   ├── api/                       # API for students
 │   │   └── routing.py             # Contains route_package function signature
-│   ├── utils/                     # Utility functions
-│   │   └── json_loader.py         # Functions to load test cases
-│   └── examples/                  # Example implementations
-│       └── basic_router.py        # Basic routing implementation
+│   └── utils/                     # Utility functions
+│       └── json_loader.py         # Functions to load test cases
 ├── test_cases/                    # Test case JSON files
 │   ├── schema.json                # JSON schema for test cases
 │   ├── level1/                    # Level 1 test cases
@@ -51,9 +49,6 @@ pip install -e .
 ```bash
 # Run the game with the default router
 python scripts/run_game.py test_cases/level1/test_case_1.json
-
-# Run the game with the basic router
-python scripts/run_game.py test_cases/level1/test_case_1.json --router basic
 ```
 
 ### Visualizing the Game
@@ -61,9 +56,6 @@ python scripts/run_game.py test_cases/level1/test_case_1.json --router basic
 ```bash
 # Visualize the game with the default router
 python scripts/visualize.py test_cases/level1/test_case_1.json
-
-# Visualize the game with the basic router
-python scripts/visualize.py test_cases/level1/test_case_1.json --router basic
 ```
 
 ## Implementing Your Own Router
@@ -90,12 +82,10 @@ def route_package(state: GameState, package: Package) -> Optional[str]:
 
 1. **Level 1**: Simple unweighted graph
 2. **Level 2**: Weighted graph (connections have different lengths)
-3. **Level 3**: Dynamic weights (weights can change over time)
-4. **Level 4**: Bandwidth limitations (connections have limited capacity)
+4. **Level 3**: Bandwidth limitations (connections have limited capacity)
 
 ## Scoring
 
 Packages are scored based on:
 - Number of packages delivered
-- Average delivery time
-- Percentage of packages delivered
+- Package delivery speed

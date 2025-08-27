@@ -1,110 +1,40 @@
 {
   "metadata": {
-    "max_time_steps": 100,
-    "description": "Sample test case with 5 FCs, dynamic weights, and bandwidth limitations"
+    "max_time_steps": 50,
+    "description": "Simple linear network"
   },
   "fulfillment_centers": [
     {
       "id": "FC1",
-      "name": "Seattle FC"
+      "name": "First FC"
     },
     {
       "id": "FC2",
-      "name": "Portland FC"
+      "name": "Second FC"
     },
     {
       "id": "FC3",
-      "name": "San Francisco FC"
-    },
-    {
-      "id": "FC4",
-      "name": "Los Angeles FC"
-    },
-    {
-      "id": "FC5",
-      "name": "Denver FC"
+      "name": "Third FC"
     }
   ],
   "connections": [
     {
       "from_fc": "FC1",
       "to_fc": "FC2",
-      "base_weight": 3
-    },
-    {
-      "from_fc": "FC1",
-      "to_fc": "FC5",
-      "base_weight": 8
+      "base_weight": 1
     },
     {
       "from_fc": "FC2",
       "to_fc": "FC3",
-      "base_weight": 5
-    },
-    {
-      "from_fc": "FC2",
-      "to_fc": "FC5",
-      "base_weight": 6
-    },
-    {
-      "from_fc": "FC3",
-      "to_fc": "FC4",
-      "base_weight": 4
-    },
-    {
-      "from_fc": "FC4",
-      "to_fc": "FC5",
-      "base_weight": 7
+      "base_weight": 1
     }
   ],
   "packages": [
     {
       "id": "PKG1",
       "source_fc": "FC1",
-      "destination_fc": "FC4",
-      "entry_time": 0
-    },
-    {
-      "id": "PKG2",
-      "source_fc": "FC2",
-      "destination_fc": "FC5",
-      "entry_time": 0
-    },
-    {
-      "id": "PKG3",
-      "source_fc": "FC1",
       "destination_fc": "FC3",
-      "entry_time": 5
-    },
-    {
-      "id": "PKG4",
-      "source_fc": "FC3",
-      "destination_fc": "FC5",
-      "entry_time": 10
-    },
-    {
-      "id": "PKG5",
-      "source_fc": "FC4",
-      "destination_fc": "FC1",
-      "entry_time": 15
-    },
-    {
-      "id": "PKG6",
-      "source_fc": "FC5",
-      "destination_fc": "FC2",
-      "entry_time": 25
-    },
-    {
-      "id": "PKG7",
-      "source_fc": "FC1",
-      "destination_fc": "FC5",
-      "entry_time": 30
-    },
-    {
-      "id": "PKG8",
-      "source_fc": "FC2",
-      "destination_fc": "FC4",
-      "entry_time": 35
+      "entry_time": 0
     }
   ]
 }

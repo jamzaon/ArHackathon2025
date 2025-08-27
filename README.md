@@ -15,20 +15,40 @@ ar_hackathon/
 │   │   ├── fulfillment_center.py  # FulfillmentCenter class
 │   │   ├── connection.py          # Connection class
 │   │   ├── package.py             # Package class
-│   │   └── game_state.py          # GameState class
+│   │   ├── game_state.py          # GameState class
+│   │   └── test_case.py           # TestCase class
 │   ├── engine/                    # Game engine components
 │   │   └── game_engine.py         # Main game engine implementation
 │   ├── api/                       # API for students
 │   │   └── routing.py             # Contains route_package function signature
-│   └── utils/                     # Utility functions
-│       └── json_loader.py         # Functions to load test cases
+│   ├── utils/                     # Utility functions
+│   │   ├── json_loader.py         # Functions to load test cases
+│   │   └── routing_utils.py       # Routing utility functions
+│   ├── visualizers/               # Visualization components
+│   │   ├── base_visualizer.py     # Base visualizer class
+│   │   ├── bokeh_visualizer.py    # Bokeh visualization implementation
+│   │   ├── network_visualizer.py  # Network visualization implementation
+│   │   ├── plotly_visualizer.py   # Plotly visualization implementation
+│   │   └── visualizer_factory.py  # Factory for creating visualizers
+│   ├── examples/                  # Example implementations
+│   │   └── basic_router.py        # Basic routing implementation
+│   └── simulation_runner.py       # Simulation runner
 ├── test_cases/                    # Test case JSON files
 │   ├── schema.json                # JSON schema for test cases
 │   ├── level1/                    # Level 1 test cases
-│   └── level2/                    # Level 2 test cases
-└── scripts/                       # Utility scripts
-    ├── run_game.py                # Script to run the game
-    └── visualize.py               # Visualization script
+│   │   ├── test_case_1.json       # Level 1 test case 1
+│   │   └── test_case_2.json       # Level 1 test case 2
+│   ├── level2/                    # Level 2 test cases
+│   │   └── test_case_3.json       # Level 2 test case
+│   └── level3/                    # Level 3 test cases
+│       └── test_case_4.json       # Level 3 test case
+├── scripts/                       # Utility scripts
+│   ├── run_game.py                # Script to run the game
+│   └── visualize.py               # Visualization script
+├── setup.py                       # Package setup and dependencies
+├── submit.py                      # Submission script
+├── team.json                      # Team information
+└── README.md                      # This file
 ```
 
 ## Installation
@@ -36,8 +56,10 @@ ar_hackathon/
 ```bash
 # Clone the repository
 git clone <repository-url>
-cd ar_hackathon
+```
 
+## Set up
+```bash
 # Install the package
 pip install -e .
 ```
@@ -49,6 +71,9 @@ pip install -e .
 ```bash
 # Run the game with the default router
 python scripts/run_game.py test_cases/level1/test_case_1.json
+
+# Run the game with the basic router
+python scripts/run_game.py test_cases/level1/test_case_1.json --router basic
 ```
 
 ### Visualizing the Game
@@ -56,6 +81,9 @@ python scripts/run_game.py test_cases/level1/test_case_1.json
 ```bash
 # Visualize the game with the default router
 python scripts/visualize.py test_cases/level1/test_case_1.json
+
+# Visualize the game with the basic router
+python scripts/visualize.py test_cases/level1/test_case_1.json --router basic
 ```
 
 ## Implementing Your Own Router
@@ -80,12 +108,15 @@ def route_package(state: GameState, package: Package) -> Optional[str]:
 
 ## Difficulty Levels
 
-1. **Level 1**: Simple unweighted graph
-2. **Level 2**: Weighted graph (connections have different lengths)
-4. **Level 3**: Bandwidth limitations (connections have limited capacity)
+1. **Level 1**: Fulfilment Centers are connected by **roads of the same length** (Simple weighted graph)
+2. **Level 2**: Fulfilment Centers are connected by **roads of different lengths** (Weighted graph)
+3. **Level 3**: Fulfilment Centers are connected by **roads of different lengths that have a limited capacity on how many packages can flow through the road at any given time** (Weighted graph with bandwidth)
 
 ## Scoring
 
-Packages are scored based on:
-- Number of packages delivered
-- Package delivery speed
+Implementations are scored based on:
+- Percentage of packages successfully delivered to the correct destination
+- Average delivery time for all deliveries
+
+## Submission
+Update the `team.json` file to contains your or your team's name and then run `python submit.py` to submit your implementation

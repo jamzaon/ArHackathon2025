@@ -45,7 +45,7 @@ class NetworkVisualizer(BaseVisualizer):
     LINE_WIDTH_FACTOR = 1
     
     # Arrow appearance
-    ARROW_SIZE = 0.03
+    ARROW_SIZE = 0.02
     ARROW_POSITION = 0.85
     
     # Label appearance
@@ -291,7 +291,8 @@ class NetworkVisualizer(BaseVisualizer):
             ),
             plot_bgcolor='rgba(0,0,0,0)',  # Transparent background
             paper_bgcolor='white',
-            autosize=True  # Allow the figure to resize
+            autosize=True,  # Allow the figure to resize
+            hovermode='closest'  # Ensure hover works properly for all elements
         )
     
     def _add_network_to_figure(self, fig: go.Figure, game_state: GameState, frame_number: int = 0) -> None:
@@ -337,13 +338,13 @@ class NetworkVisualizer(BaseVisualizer):
                 color = self._calculate_connection_color(conn)
                 
                 # Add the connection line
-                self._draw_connection_line(fig, x0, y0, x1, y1, conn, packages_on_connection, line_width, color)
+                self._draw_connection_line(fig, x0, y0, x1, y1, conn, line_width, color)
                 
-                # Add the arrowhead
-                self._draw_connection_arrow(fig, x0, y0, x1, y1, color)
+                # Add the arrowhead with hover text
+                self._draw_connection_arrow(fig, x0, y0, x1, y1, color, conn)
                 
                 # Add the weight label
-                self._draw_weight_label(fig, x0, y0, x1, y1, conn.weight)
+                # self._draw_weight_label(fig, x0, y0, x1, y1, conn.weight)
     
     def _calculate_connection_width(self, packages_count: int) -> float:
         """
@@ -389,7 +390,7 @@ class NetworkVisualizer(BaseVisualizer):
             return 'gray'  # Unlimited bandwidth
     
     def _draw_connection_line(self, fig: go.Figure, x0: float, y0: float, x1: float, y1: float, 
-                             conn: Connection, packages: List[Package], width: float, color: str) -> None:
+                             conn: Connection, width: float, color: str) -> None:
         """
         Draw a connection line between two fulfillment centers.
         
@@ -402,30 +403,27 @@ class NetworkVisualizer(BaseVisualizer):
             width: Width of the connection line
             color: Color of the connection line
         """
-        # Format package IDs for tooltip
-        package_ids_text = ""
-        if packages:
-            package_ids = [pkg.id for pkg in packages]
-            package_ids_text = "<br>Package IDs: " + ", ".join(package_ids)
+        # Create hover text
+        hover_text = f"Connection: {conn.from_fc} → {conn.to_fc}<br>" \
+                     f"Weight: {conn.weight}<br>" \
+                     f"Bandwidth: {conn.available_bandwidth}/{conn.bandwidth if conn.bandwidth is not None else 'Unlimited'}<br>"
         
-        # Add the edge line
+        # Add the edge line - provide hover text for both endpoints
         fig.add_trace(
             go.Scatter(
                 x=[x0, x1],
                 y=[y0, y1],
                 mode='lines',
                 line=dict(width=width, color=color),
+                text=[hover_text, hover_text],  # Same text for both endpoints
                 hoverinfo='text',
-                hovertext=f"Connection: {conn.from_fc} → {conn.to_fc}<br>"
-                         f"Weight: {conn.weight}<br>"
-                         f"Bandwidth: {conn.available_bandwidth}/{conn.bandwidth if conn.bandwidth is not None else 'Unlimited'}<br>"
-                         f"Packages in transit: {len(packages)}{package_ids_text}",
                 showlegend=False
             ),
             row=1, col=1
         )
     
-    def _draw_connection_arrow(self, fig: go.Figure, x0: float, y0: float, x1: float, y1: float, color: str) -> None:
+    def _draw_connection_arrow(self, fig: go.Figure, x0: float, y0: float, x1: float, y1: float, color: str, 
+                              conn: Connection) -> None:
         """
         Draw an arrow on a connection to indicate direction.
         
@@ -434,6 +432,8 @@ class NetworkVisualizer(BaseVisualizer):
             x0, y0: Coordinates of the source FC
             x1, y1: Coordinates of the destination FC
             color: Color of the arrow
+            conn: Connection object
+            packages: List of packages traversing this connection
         """
         # Calculate the position for the arrowhead
         ax = x0 + (x1 - x0) * self.ARROW_POSITION
@@ -454,7 +454,12 @@ class NetworkVisualizer(BaseVisualizer):
             rotated_x.append(ax + triangle_x[i] * np.cos(angle) - triangle_y[i] * np.sin(angle))
             rotated_y.append(ay + triangle_x[i] * np.sin(angle) + triangle_y[i] * np.cos(angle))
         
-        # Add the arrowhead
+        # Create hover text
+        hover_text = f"Connection: {conn.from_fc} → {conn.to_fc}<br>" \
+                     f"Weight: {conn.weight}<br>" \
+                     f"Bandwidth: {conn.available_bandwidth}/{conn.bandwidth if conn.bandwidth is not None else 'Unlimited'}<br>"
+        
+        # Add the arrowhead with hover text
         fig.add_trace(
             go.Scatter(
                 x=rotated_x,
@@ -463,7 +468,8 @@ class NetworkVisualizer(BaseVisualizer):
                 fill='toself',
                 fillcolor=color,
                 line=dict(color='black', width=1),
-                hoverinfo='skip',
+                text=hover_text,
+                hoverinfo='text',
                 showlegend=False
             ),
             row=1, col=1
@@ -597,7 +603,7 @@ class NetworkVisualizer(BaseVisualizer):
         )
         
         # Add package counts as labels
-        self._draw_package_count_labels(fig, node_x, node_y, node_package_counts)
+        # self._draw_package_count_labels(fig, node_x, node_y, node_package_counts)
     
     def _draw_package_count_labels(self, fig: go.Figure, node_x: List[float], 
                                   node_y: List[float], counts: List[int]) -> None:
@@ -625,9 +631,10 @@ class NetworkVisualizer(BaseVisualizer):
                             family='Arial Black'
                         ),
                         # Add a blue background to the text
-                        texttemplate='<span style="background-color: rgba(173,216,230,0.7); padding: 3px; border-radius: 10px; border: 1px solid #0000FF;">%{text}</span>',
+                        # texttemplate='<span style="background-color: rgba(173,216,230,0.7); padding: 3px; border-radius: 10px; border: 1px solid #0000FF;">%{text}</span>',
                         hoverinfo='skip',
-                        showlegend=False
+                        showlegend=False,
+                        name=f'Package Count Label {i}'  # Add unique name to avoid conflicts
                     ),
                     row=1, col=1
                 )
@@ -642,7 +649,7 @@ class NetworkVisualizer(BaseVisualizer):
             frame_number: Frame number for unique trace naming
         """
         # Draw packages at FCs
-        self._draw_packages_at_fc(fig, game_state)
+        # self._draw_packages_at_fc(fig, game_state)
         
         # Draw packages in transit
         self._draw_packages_in_transit(fig, game_state, frame_number)
@@ -756,9 +763,9 @@ class NetworkVisualizer(BaseVisualizer):
                         color=self.PACKAGE_COLOR,
                         symbol=self.PACKAGE_IN_TRANSIT_SYMBOL
                     ),
-                    hoverinfo='text',
-                    hovertext=pkg_hover,
-                    name=f'Packages in Transit - Frame {frame_number}'  # Add frame number to make unique
+                hoverinfo='text',
+                hovertext=pkg_hover,
+                name='Packages in Transit'
                 ),
                 row=1, col=1
             )

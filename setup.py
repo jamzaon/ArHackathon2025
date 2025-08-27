@@ -11,7 +11,15 @@ setup(
     name="ar_hackathon",
     version="0.1.0",
     packages=find_packages(),
-    install_requires=[],
+    install_requires=[
+        "networkx",
+        "plotly",
+        "numpy",
+        "bokeh",
+        "kaleido",
+        "scipy",
+        "requests"
+    ],
     scripts=[
         "scripts/run_game.py",
         "scripts/visualize.py",

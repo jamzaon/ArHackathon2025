@@ -26,8 +26,8 @@ def main():
                         help='Output format (default: both)')
     parser.add_argument('--interactive', action='store_true',
                         help='Run in interactive mode (step by step)')
-    parser.add_argument('--visualizer', default='plotly', choices=['plotly', 'bokeh', 'network'],
-                        help='Visualization backend to use (default: plotly)')
+    parser.add_argument('--visualizer', default='network', choices=['network'],
+                        help='Visualization backend to use (default: network)')
     args = parser.parse_args()
     
     # Check if the test case file exists
@@ -66,21 +66,7 @@ def main():
         visualizer = VisualizerFactory.create_visualizer(args.visualizer)
         
         # Calculate the layout first for visualizers that support it
-        if args.visualizer == 'plotly':
-            from ar_hackathon.visualizers.plotly_visualizer import PlotlyVisualizer
-            if isinstance(visualizer, PlotlyVisualizer):
-                visualizer.calculate_layout(
-                    runner.engine.test_case.fulfillment_centers,
-                    runner.engine.test_case.connections
-                )
-        elif args.visualizer == 'bokeh':
-            from ar_hackathon.visualizers.bokeh_visualizer import BokehVisualizer
-            if isinstance(visualizer, BokehVisualizer):
-                visualizer.calculate_layout(
-                    runner.engine.test_case.fulfillment_centers,
-                    runner.engine.test_case.connections
-                )
-        elif args.visualizer == 'network':
+        if args.visualizer == 'network':
             from ar_hackathon.visualizers.network_visualizer import NetworkVisualizer
             if isinstance(visualizer, NetworkVisualizer):
                 visualizer.calculate_layout(

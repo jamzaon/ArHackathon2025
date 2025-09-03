@@ -26,9 +26,7 @@ ar_hackathon/
 │   │   └── routing_utils.py       # Routing utility functions
 │   ├── visualizers/               # Visualization components
 │   │   ├── base_visualizer.py     # Base visualizer class
-│   │   ├── bokeh_visualizer.py    # Bokeh visualization implementation
 │   │   ├── network_visualizer.py  # Network visualization implementation
-│   │   ├── plotly_visualizer.py   # Plotly visualization implementation
 │   │   └── visualizer_factory.py  # Factory for creating visualizers
 │   ├── examples/                  # Example implementations
 │   │   └── basic_router.py        # Basic routing implementation
@@ -77,6 +75,16 @@ python scripts/run_game.py test_cases/level1/test_case_1.json --router basic
 ```
 
 ### Visualizing the Game
+
+#### Pre-Requisite
+
+Kaleido requires Google Chrome to be installed. If Chrome is not installed, a static visualization can still be viewed by accessing frames in `visualization_output/` directly.
+
+#### Running the Visualizer
+
+Visualization output will be saved to the `visualization_output/` directory.
+
+Example:
 
 ```bash
 # Visualize the game with the default router

@@ -1,0 +1,664 @@
+{
+  "metadata": {
+    "max_time_steps": 100,
+    "description": "Complex test with 16 FCs and 30 packages"
+  },
+  "fulfillment_centers": [
+    {
+      "id": "FC1",
+      "name": "FC 1"
+    },
+    {
+      "id": "FC2",
+      "name": "FC 2"
+    },
+    {
+      "id": "FC3",
+      "name": "FC 3"
+    },
+    {
+      "id": "FC4",
+      "name": "FC 4"
+    },
+    {
+      "id": "FC5",
+      "name": "FC 5"
+    },
+    {
+      "id": "FC6",
+      "name": "FC 6"
+    },
+    {
+      "id": "FC7",
+      "name": "FC 7"
+    },
+    {
+      "id": "FC8",
+      "name": "FC 8"
+    },
+    {
+      "id": "FC9",
+      "name": "FC 9"
+    },
+    {
+      "id": "FC10",
+      "name": "FC 10"
+    },
+    {
+      "id": "FC11",
+      "name": "FC 11"
+    },
+    {
+      "id": "FC12",
+      "name": "FC 12"
+    },
+    {
+      "id": "FC13",
+      "name": "FC 13"
+    },
+    {
+      "id": "FC14",
+      "name": "FC 14"
+    },
+    {
+      "id": "FC15",
+      "name": "FC 15"
+    },
+    {
+      "id": "FC16",
+      "name": "FC 16"
+    }
+  ],
+  "connections": [
+    {
+      "from_fc": "FC1",
+      "to_fc": "FC16",
+      "base_weight": 2,
+      "bandwidth": 25
+    },
+    {
+      "from_fc": "FC1",
+      "to_fc": "FC12",
+      "base_weight": 3,
+      "bandwidth": 26
+    },
+    {
+      "from_fc": "FC2",
+      "to_fc": "FC4",
+      "base_weight": 1,
+      "bandwidth": 10
+    },
+    {
+      "from_fc": "FC2",
+      "to_fc": "FC17",
+      "base_weight": 4,
+      "bandwidth": 44
+    },
+    {
+      "from_fc": "FC2",
+      "to_fc": "FC3",
+      "base_weight": 8,
+      "bandwidth": 43
+    },
+    {
+      "from_fc": "FC2",
+      "to_fc": "FC9",
+      "base_weight": 8,
+      "bandwidth": 21
+    },
+    {
+      "from_fc": "FC2",
+      "to_fc": "FC14",
+      "base_weight": 3,
+      "bandwidth": 33
+    },
+    {
+      "from_fc": "FC2",
+      "to_fc": "FC15",
+      "base_weight": 1,
+      "bandwidth": 22
+    },
+    {
+      "from_fc": "FC2",
+      "to_fc": "FC7",
+      "base_weight": 8,
+      "bandwidth": 29
+    },
+    {
+      "from_fc": "FC2",
+      "to_fc": "FC11",
+      "base_weight": 4,
+      "bandwidth": 5
+    },
+    {
+      "from_fc": "FC3",
+      "to_fc": "FC1",
+      "base_weight": 10,
+      "bandwidth": 35
+    },
+    {
+      "from_fc": "FC3",
+      "to_fc": "FC5",
+      "base_weight": 6,
+      "bandwidth": 20
+    },
+    {
+      "from_fc": "FC3",
+      "to_fc": "FC8",
+      "base_weight": 7,
+      "bandwidth": 46
+    },
+    {
+      "from_fc": "FC3",
+      "to_fc": "FC10",
+      "base_weight": 9,
+      "bandwidth": 25
+    },
+    {
+      "from_fc": "FC3",
+      "to_fc": "FC4",
+      "base_weight": 6,
+      "bandwidth": 44
+    },
+    {
+      "from_fc": "FC3",
+      "to_fc": "FC7",
+      "base_weight": 3,
+      "bandwidth": 23
+    },
+    {
+      "from_fc": "FC4",
+      "to_fc": "FC7",
+      "base_weight": 6,
+      "bandwidth": 50
+    },
+    {
+      "from_fc": "FC5",
+      "to_fc": "FC13",
+      "base_weight": 9,
+      "bandwidth": 9
+    },
+    {
+      "from_fc": "FC5",
+      "to_fc": "FC4",
+      "base_weight": 2,
+      "bandwidth": 8
+    },
+    {
+      "from_fc": "FC5",
+      "to_fc": "FC8",
+      "base_weight": 9,
+      "bandwidth": 35
+    },
+    {
+      "from_fc": "FC5",
+      "to_fc": "FC6",
+      "base_weight": 3,
+      "bandwidth": 34
+    },
+    {
+      "from_fc": "FC5",
+      "to_fc": "FC2",
+      "base_weight": 1,
+      "bandwidth": 50
+    },
+    {
+      "from_fc": "FC5",
+      "to_fc": "FC15",
+      "base_weight": 8,
+      "bandwidth": 10
+    },
+    {
+      "from_fc": "FC5",
+      "to_fc": "FC10",
+      "base_weight": 7,
+      "bandwidth": 41
+    },
+    {
+      "from_fc": "FC5",
+      "to_fc": "FC7",
+      "base_weight": 6,
+      "bandwidth": 27
+    },
+    {
+      "from_fc": "FC6",
+      "to_fc": "FC16",
+      "base_weight": 1,
+      "bandwidth": 24
+    },
+    {
+      "from_fc": "FC6",
+      "to_fc": "FC2",
+      "base_weight": 5,
+      "bandwidth": 45
+    },
+    {
+      "from_fc": "FC6",
+      "to_fc": "FC13",
+      "base_weight": 5,
+      "bandwidth": 37
+    },
+    {
+      "from_fc": "FC6",
+      "to_fc": "FC3",
+      "base_weight": 5,
+      "bandwidth": 14
+    },
+    {
+      "from_fc": "FC6",
+      "to_fc": "FC7",
+      "base_weight": 9,
+      "bandwidth": 28
+    },
+    {
+      "from_fc": "FC7",
+      "to_fc": "FC13",
+      "base_weight": 7,
+      "bandwidth": 37
+    },
+    {
+      "from_fc": "FC7",
+      "to_fc": "FC8",
+      "base_weight": 6,
+      "bandwidth": 6
+    },
+    {
+      "from_fc": "FC7",
+      "to_fc": "FC12",
+      "base_weight": 1,
+      "bandwidth": 4
+    },
+    {
+      "from_fc": "FC7",
+      "to_fc": "FC4",
+      "base_weight": 6,
+      "bandwidth": 23
+    },
+    {
+      "from_fc": "FC7",
+      "to_fc": "FC5",
+      "base_weight": 3,
+      "bandwidth": 50
+    },
+    {
+      "from_fc": "FC7",
+      "to_fc": "FC16",
+      "base_weight": 2,
+      "bandwidth": 31
+    },
+    {
+      "from_fc": "FC7",
+      "to_fc": "FC2",
+      "base_weight": 6,
+      "bandwidth": 34
+    },
+    {
+      "from_fc": "FC8",
+      "to_fc": "FC2",
+      "base_weight": 1,
+      "bandwidth": 47
+    },
+    {
+      "from_fc": "FC8",
+      "to_fc": "FC10",
+      "base_weight": 9,
+      "bandwidth": 10
+    },
+    {
+      "from_fc": "FC8",
+      "to_fc": "FC3",
+      "base_weight": 3,
+      "bandwidth": 24
+    },
+    {
+      "from_fc": "FC8",
+      "to_fc": "FC9",
+      "base_weight": 8,
+      "bandwidth": 6
+    },
+    {
+      "from_fc": "FC8",
+      "to_fc": "FC11",
+      "base_weight": 2,
+      "bandwidth": 46
+    },
+    {
+      "from_fc": "FC9",
+      "to_fc": "FC6",
+      "base_weight": 1,
+      "bandwidth": 19
+    },
+    {
+      "from_fc": "FC9",
+      "to_fc": "FC5",
+      "base_weight": 2,
+      "bandwidth": 37
+    },
+    {
+      "from_fc": "FC9",
+      "to_fc": "FC11",
+      "base_weight": 8,
+      "bandwidth": 13
+    },
+    {
+      "from_fc": "FC10",
+      "to_fc": "FC17",
+      "base_weight": 7,
+      "bandwidth": 2
+    },
+    {
+      "from_fc": "FC10",
+      "to_fc": "FC4",
+      "base_weight": 6,
+      "bandwidth": 9
+    },
+    {
+      "from_fc": "FC10",
+      "to_fc": "FC13",
+      "base_weight": 6,
+      "bandwidth": 13
+    },
+    {
+      "from_fc": "FC11",
+      "to_fc": "FC2",
+      "base_weight": 10,
+      "bandwidth": 7
+    },
+    {
+      "from_fc": "FC11",
+      "to_fc": "FC16",
+      "base_weight": 7,
+      "bandwidth": 34
+    },
+    {
+      "from_fc": "FC11",
+      "to_fc": "FC12",
+      "base_weight": 7,
+      "bandwidth": 20
+    },
+    {
+      "from_fc": "FC11",
+      "to_fc": "FC14",
+      "base_weight": 7,
+      "bandwidth": 35
+    },
+    {
+      "from_fc": "FC11",
+      "to_fc": "FC3",
+      "base_weight": 4,
+      "bandwidth": 44
+    },
+    {
+      "from_fc": "FC11",
+      "to_fc": "FC17",
+      "base_weight": 3,
+      "bandwidth": 50
+    },
+    {
+      "from_fc": "FC11",
+      "to_fc": "FC13",
+      "base_weight": 4,
+      "bandwidth": 6
+    },
+    {
+      "from_fc": "FC12",
+      "to_fc": "FC13",
+      "base_weight": 5,
+      "bandwidth": 24
+    },
+    {
+      "from_fc": "FC13",
+      "to_fc": "FC3",
+      "base_weight": 10,
+      "bandwidth": 20
+    },
+    {
+      "from_fc": "FC14",
+      "to_fc": "FC13",
+      "base_weight": 9,
+      "bandwidth": 14
+    },
+    {
+      "from_fc": "FC14",
+      "to_fc": "FC7",
+      "base_weight": 6,
+      "bandwidth": 39
+    },
+    {
+      "from_fc": "FC14",
+      "to_fc": "FC11",
+      "base_weight": 3,
+      "bandwidth": 34
+    },
+    {
+      "from_fc": "FC14",
+      "to_fc": "FC6",
+      "base_weight": 3,
+      "bandwidth": 23
+    },
+    {
+      "from_fc": "FC15",
+      "to_fc": "FC2",
+      "base_weight": 4,
+      "bandwidth": 16
+    },
+    {
+      "from_fc": "FC15",
+      "to_fc": "FC12",
+      "base_weight": 1,
+      "bandwidth": 5
+    },
+    {
+      "from_fc": "FC15",
+      "to_fc": "FC8",
+      "base_weight": 8,
+      "bandwidth": 21
+    },
+    {
+      "from_fc": "FC15",
+      "to_fc": "FC9",
+      "base_weight": 1,
+      "bandwidth": 29
+    },
+    {
+      "from_fc": "FC15",
+      "to_fc": "FC5",
+      "base_weight": 1,
+      "bandwidth": 34
+    },
+    {
+      "from_fc": "FC15",
+      "to_fc": "FC17",
+      "base_weight": 4,
+      "bandwidth": 13
+    },
+    {
+      "from_fc": "FC15",
+      "to_fc": "FC13",
+      "base_weight": 4,
+      "bandwidth": 30
+    }
+  ],
+  "packages": [
+    {
+      "id": "PKG1",
+      "source_fc": "FC14",
+      "destination_fc": "FC7",
+      "entry_time": 0
+    },
+    {
+      "id": "PKG2",
+      "source_fc": "FC5",
+      "destination_fc": "FC14",
+      "entry_time": 7
+    },
+    {
+      "id": "PKG3",
+      "source_fc": "FC3",
+      "destination_fc": "FC1",
+      "entry_time": 12
+    },
+    {
+      "id": "PKG4",
+      "source_fc": "FC3",
+      "destination_fc": "FC13",
+      "entry_time": 15
+    },
+    {
+      "id": "PKG5",
+      "source_fc": "FC8",
+      "destination_fc": "FC6",
+      "entry_time": 48
+    },
+    {
+      "id": "PKG6",
+      "source_fc": "FC2",
+      "destination_fc": "FC15",
+      "entry_time": 40
+    },
+    {
+      "id": "PKG7",
+      "source_fc": "FC1",
+      "destination_fc": "FC2",
+      "entry_time": 27
+    },
+    {
+      "id": "PKG8",
+      "source_fc": "FC12",
+      "destination_fc": "FC9",
+      "entry_time": 31
+    },
+    {
+      "id": "PKG9",
+      "source_fc": "FC4",
+      "destination_fc": "FC16",
+      "entry_time": 22
+    },
+    {
+      "id": "PKG10",
+      "source_fc": "FC13",
+      "destination_fc": "FC5",
+      "entry_time": 20
+    },
+    {
+      "id": "PKG11",
+      "source_fc": "FC15",
+      "destination_fc": "FC14",
+      "entry_time": 40
+    },
+    {
+      "id": "PKG12",
+      "source_fc": "FC6",
+      "destination_fc": "FC12",
+      "entry_time": 33
+    },
+    {
+      "id": "PKG13",
+      "source_fc": "FC1",
+      "destination_fc": "FC4",
+      "entry_time": 11
+    },
+    {
+      "id": "PKG14",
+      "source_fc": "FC2",
+      "destination_fc": "FC5",
+      "entry_time": 19
+    },
+    {
+      "id": "PKG15",
+      "source_fc": "FC1",
+      "destination_fc": "FC12",
+      "entry_time": 43
+    },
+    {
+      "id": "PKG16",
+      "source_fc": "FC14",
+      "destination_fc": "FC12",
+      "entry_time": 38
+    },
+    {
+      "id": "PKG17",
+      "source_fc": "FC3",
+      "destination_fc": "FC13",
+      "entry_time": 12
+    },
+    {
+      "id": "PKG18",
+      "source_fc": "FC11",
+      "destination_fc": "FC14",
+      "entry_time": 32
+    },
+    {
+      "id": "PKG19",
+      "source_fc": "FC6",
+      "destination_fc": "FC10",
+      "entry_time": 0
+    },
+    {
+      "id": "PKG20",
+      "source_fc": "FC5",
+      "destination_fc": "FC7",
+      "entry_time": 37
+    },
+    {
+      "id": "PKG21",
+      "source_fc": "FC12",
+      "destination_fc": "FC6",
+      "entry_time": 14
+    },
+    {
+      "id": "PKG22",
+      "source_fc": "FC7",
+      "destination_fc": "FC3",
+      "entry_time": 47
+    },
+    {
+      "id": "PKG23",
+      "source_fc": "FC15",
+      "destination_fc": "FC4",
+      "entry_time": 39
+    },
+    {
+      "id": "PKG24",
+      "source_fc": "FC5",
+      "destination_fc": "FC9",
+      "entry_time": 19
+    },
+    {
+      "id": "PKG25",
+      "source_fc": "FC8",
+      "destination_fc": "FC13",
+      "entry_time": 42
+    },
+    {
+      "id": "PKG26",
+      "source_fc": "FC3",
+      "destination_fc": "FC5",
+      "entry_time": 21
+    },
+    {
+      "id": "PKG27",
+      "source_fc": "FC2",
+      "destination_fc": "FC7",
+      "entry_time": 0
+    },
+    {
+      "id": "PKG28",
+      "source_fc": "FC14",
+      "destination_fc": "FC4",
+      "entry_time": 19
+    },
+    {
+      "id": "PKG29",
+      "source_fc": "FC11",
+      "destination_fc": "FC9",
+      "entry_time": 2
+    },
+    {
+      "id": "PKG30",
+      "source_fc": "FC11",
+      "destination_fc": "FC8",
+      "entry_time": 20
+    }
+  ]
+}

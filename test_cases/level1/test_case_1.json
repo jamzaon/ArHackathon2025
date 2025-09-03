@@ -1,0 +1,40 @@
+{
+  "metadata": {
+    "max_time_steps": 50,
+    "description": "Simple linear network"
+  },
+  "fulfillment_centers": [
+    {
+      "id": "FC1",
+      "name": "First FC"
+    },
+    {
+      "id": "FC2",
+      "name": "Second FC"
+    },
+    {
+      "id": "FC3",
+      "name": "Third FC"
+    }
+  ],
+  "connections": [
+    {
+      "from_fc": "FC1",
+      "to_fc": "FC2",
+      "base_weight": 1
+    },
+    {
+      "from_fc": "FC2",
+      "to_fc": "FC3",
+      "base_weight": 1
+    }
+  ],
+  "packages": [
+    {
+      "id": "PKG1",
+      "source_fc": "FC1",
+      "destination_fc": "FC3",
+      "entry_time": 0
+    }
+  ]
+}

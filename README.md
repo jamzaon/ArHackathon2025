@@ -143,6 +143,8 @@ def route_package(state: GameState, package: Package) -> Optional[str]:
 
 The `GameState` and `Package` classes are defined in the `models` directory.
 
+**Important**: Fill in your team name and email address in the comment at the top.
+
 ### Rules
 1. You can only modify `routing.py`. This is the only file that will be submitted.
 1. You cannot use any external libraries as these may not be installed when your submission is evaluated.

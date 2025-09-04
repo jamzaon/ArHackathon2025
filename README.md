@@ -59,6 +59,7 @@ git clone <repository-url>
 ## Set up
 ```bash
 # Install the package
+cd ArHackathon2025
 pip install -e .
 ```
 
@@ -67,14 +68,19 @@ pip install -e .
 ### Running the Game
 
 ```bash
-# Run the game with the default router
+# Run the game with your router
 python scripts/run_game.py test_cases/level1/test_case_1.json
 
-# Run the game with the basic router
+# Run the game with the example basic router
 python scripts/run_game.py test_cases/level1/test_case_1.json --router basic
 ```
 
+There are more test cases you can practice with in the `test_cases` directory. When you submit your solution, it will be evaluated
+against additional hidden test cases.
+
 ### Visualizing the Game
+
+There is a visualizer included to help you develop your solution.
 
 #### Pre-Requisite
 
@@ -87,14 +93,31 @@ Visualization output will be saved to the `visualization_output/` directory.
 Example:
 
 ```bash
-# Visualize the game with the default router
+# Visualize the game your default router
 python scripts/visualize.py test_cases/level1/test_case_1.json
 
-# Visualize the game with the basic router
+# Visualize the game with the example basic router
 python scripts/visualize.py test_cases/level1/test_case_1.json --router basic
 ```
 
-## Implementing Your Own Router
+This will output an animation file at `./visualization_output/animation.html`. You can view this in your browser by running the following
+and pasting the output into your browser address bar:
+```bash
+echo "file:///$(pwd)/visualization_output/animation.html"
+```
+
+## Instructions
+
+### Game Mechanics
+
+Each game run is based on a test case file that defines the FCs, the connections between them and the packages that will arrive. The game loop
+then runs as follows:
+1. Spawn new packages.
+1. For each active package that is not in transit, call the user's `route_package` function and move the packages.
+1. Advance the packages that are in transit.
+1. Check for delivered packages.
+
+### Implementing Your Own Router
 
 To implement your own routing algorithm, modify the `route_package` function in `ar_hackathon/api/routing.py`:
 
@@ -114,17 +137,26 @@ def route_package(state: GameState, package: Package) -> Optional[str]:
     pass
 ```
 
+The `GameState` and `Package` classes are defined in the `models` directory.
+
+### Rules
+1. You can only modify `routing.py`. This is the only file that will be submitted.
+1. You cannot use any external libraries as these may not be installed when your submission is evaluated.
+1. If your function returns an invalid move for a package, the package will not get moved.
+
 ## Difficulty Levels
 
-1. **Level 1**: Fulfilment Centers are connected by **roads of the same length** (Simple weighted graph)
-2. **Level 2**: Fulfilment Centers are connected by **roads of different lengths** (Weighted graph)
-3. **Level 3**: Fulfilment Centers are connected by **roads of different lengths that have a limited capacity on how many packages can flow through the road at any given time** (Weighted graph with bandwidth)
+1. **Level 1**: Fulfilment Centers are connected by **roads of the same length**
+2. **Level 2**: Fulfilment Centers are connected by **roads of different lengths**
+3. **Level 3**: Fulfilment Centers are connected by **roads of different lengths that have a limited capacity on how many packages can flow through the road at any given time**
+
+There are test cases of different difficulty levels. When your submission is evaluated, it will be run against all difficulty levels to compute the final score.
 
 ## Scoring
 
-Implementations are scored based on:
-- Percentage of packages successfully delivered to the correct destination
-- Average delivery time for all deliveries
+Scoring for a test case is calculated as `e^(-delivery_duration/50)` for each package delivered, and is then normalized so that it is out of 100. This gives points for number of packages delivered and the speed of delivery.
+
+The final score will be the sum of the scores from each test case.
 
 ## Submission
-Update the `team.json` file to contains your or your team's name and then run `python submit.py` to submit your implementation
+Update the `team.json` file to contain your or your team's name and then run `python submit.py` to submit your implementation.

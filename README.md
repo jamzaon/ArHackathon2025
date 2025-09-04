@@ -63,6 +63,8 @@ cd ArHackathon2025
 pip install -e .
 ```
 
+**You will need to re-install the package after making any changes to your solution.**
+
 ## Usage
 
 ### Running the Game
@@ -106,6 +108,8 @@ and pasting the output into your browser address bar:
 echo "file:///$(pwd)/visualization_output/animation.html"
 ```
 
+Note that there is a glitch with the visualizer where the packages will appear to jump around the first time it runs. Let it run, then drag the slider back to the start and the packages won't jump around.
+
 ## Instructions
 
 ### Game Mechanics
@@ -143,6 +147,7 @@ The `GameState` and `Package` classes are defined in the `models` directory.
 1. You can only modify `routing.py`. This is the only file that will be submitted.
 1. You cannot use any external libraries as these may not be installed when your submission is evaluated.
 1. If your function returns an invalid move for a package, the package will not get moved.
+1. Timeouts: test case execution will timeout after 2 minutes, function calls will time out after 1 second, and there is a configured maximum step count for each test case after which test case execution will end. The size of the provided test cases are representative of those you will be evaluated on.
 
 ## Difficulty Levels
 
@@ -154,7 +159,7 @@ There are test cases of different difficulty levels. When your submission is eva
 
 ## Scoring
 
-Scoring for a test case is calculated as `e^(-delivery_duration/50)` for each package delivered, and is then normalized so that it is out of 100. This gives points for number of packages delivered and the speed of delivery.
+Scoring for a test case is calculated as `e^(-delivery_duration/50)` for each package delivered, and is then normalized so that it is out of 100. This gives points for number of packages delivered and the speed of delivery. Note that the score is an arbitrary number; more is better, but comparison of scores is only valid for the same test case. No solution will be able to achieve a score of 100.
 
 The final score will be the sum of the scores from each test case.
 

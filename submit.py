@@ -2,12 +2,18 @@
 import os
 import requests
 import json
+import re
+
+def sanitize_filename(name):
+    sanitized = re.sub(r'[^a-zA-Z0-9._-]', '_', name)
+    if sanitized and not sanitized[0].isalnum():
+        sanitized = 'team_' + sanitized
+    return sanitized
 
 def main():
-    # Read team name from team.json
     with open('team.json', 'r') as f:
         team_data = json.load(f)
-        team_name = team_data['name']
+        team_name = sanitize_filename(team_data['name'])
     
     routing_file = "ar_hackathon/api/routing.py"
     renamed_file = f"{team_name}_routing.py"

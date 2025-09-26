@@ -123,6 +123,76 @@ def has_capacity_constraints(state: GameState) -> bool:
             return True
     return False
 
+def bfs_fewest_hops_path(state: GameState, start_fc: str, end_fc: str) -> Optional[List[str]]:
+    """
+    Finds the shortest path in terms of the number of FCs (hops) using BFS.
+
+    Only considers connections where 'available_bandwidth' > 0.
+
+    Args:
+        state: The current GameState.
+        start_fc: ID of the starting Fulfillment Center.
+        end_fc: ID of the destination Fulfillment Center.
+
+    Returns:
+        A list of FC IDs representing the path (e.g., ['A', 'B', 'C']), or None if no path exists.
+    """
+    # Queue stores FC IDs to visit
+    queue = deque([start_fc])
+
+    # Stores the predecessor FC in the path
+    predecessor = {fc.id: None for fc in state.fulfillment_centers}
+
+    # Keep track of visited nodes to avoid cycles and redundant processing
+    visited = {start_fc}
+
+    # Map FC IDs to outgoing connections for quick lookup
+    outgoing_conns = {fc.id: [] for fc in state.fulfillment_centers}
+    for conn in state.connections:
+        outgoing_conns[conn.from_fc].append(conn)
+
+    path_found = False
+
+    while queue:
+        u = queue.popleft()
+
+        # Stop condition
+        if u == end_fc:
+            path_found = True
+            break
+
+        # Explore neighbors
+        for conn in outgoing_conns.get(u, []):
+            v = conn.to_fc
+
+            # Check capacity constraint: MUST have available bandwidth
+            # Note: None means unlimited, which is > 0
+            if conn.available_bandwidth is not None and conn.available_bandwidth <= 0:
+                continue
+
+            if v not in visited:
+                visited.add(v)
+                predecessor[v] = u
+                queue.append(v)
+
+    # Reconstruct path if destination was reached
+    if not path_found:
+        return None  # No path found
+
+    path = []
+    current = end_fc
+    while current is not None:
+        path.append(current)
+        if current == start_fc:
+            break
+        current = predecessor[current]
+
+        # Safety break if a cycle or unlinked state is detected (shouldn't happen in a valid graph)
+        if current is None and end_fc != start_fc:
+            return None
+
+    return path[::-1]  # Reverse to get path from start to end
+
 def build_flow_network(state: GameState, packages: List[Package]) -> Tuple[MinCostMaxFlow, Dict[str, int], Dict[int, str]]:
     """
     Build a flow network for min cost max flow routing.
@@ -260,6 +330,96 @@ def get_optimal_routing(state: GameState, packages: List[Package]) -> Dict[str, 
     
     return routing
 
+def simple_heuristic(fc1_id: str, fc2_id: str, state: GameState) -> float:
+    """
+    Calculate a simple heuristic distance between two FCs.
+    Since we don't have coordinates, we use a constant heuristic.
+    
+    Args:
+        fc1_id: First FC ID
+        fc2_id: Second FC ID
+        state: GameState object
+        
+    Returns:
+        Heuristic distance (constant for now)
+    """
+    # Simple heuristic: return 0 to make A* behave like Dijkstra
+    # This ensures optimality while still using A* structure
+    return 0.0
+
+def astar_shortest_path(state: GameState, start_fc: str, end_fc: str) -> Optional[List[str]]:
+    """
+    Find the shortest path from start_fc to end_fc using A* algorithm.
+    
+    Args:
+        state: GameState object containing the network
+        start_fc: Starting FC ID
+        end_fc: Destination FC ID
+        
+    Returns:
+        List of FC IDs representing the shortest path, or None if no path exists
+    """
+    # Build adjacency list
+    graph = {}
+    for fc in state.fulfillment_centers:
+        graph[fc.id] = []
+    
+    for conn in state.connections:
+        if conn.from_fc in graph:
+            graph[conn.from_fc].append((conn.to_fc, conn.weight))
+    
+    # Check if start and end FCs exist in the graph
+    if start_fc not in graph or end_fc not in graph:
+        return None
+    
+    # A* algorithm
+    g_score = {fc_id: float('inf') for fc_id in graph}
+    g_score[start_fc] = 0
+    
+    f_score = {fc_id: float('inf') for fc_id in graph}
+    f_score[start_fc] = simple_heuristic(start_fc, end_fc, state)
+    
+    previous = {fc_id: None for fc_id in graph}
+    
+    # Priority queue: (f_score, fc_id)
+    pq = [(f_score[start_fc], start_fc)]
+    visited = set()
+    
+    while pq:
+        current_f_score, current_fc = heapq.heappop(pq)
+        
+        if current_fc in visited:
+            continue
+        visited.add(current_fc)
+        
+        if current_fc == end_fc:
+            break
+            
+        for neighbor_fc, weight in graph[current_fc]:
+            if neighbor_fc in visited or neighbor_fc not in graph:
+                continue
+                
+            tentative_g_score = g_score[current_fc] + weight
+            
+            if tentative_g_score < g_score[neighbor_fc]:
+                g_score[neighbor_fc] = tentative_g_score
+                f_score[neighbor_fc] = tentative_g_score + simple_heuristic(neighbor_fc, end_fc, state)
+                previous[neighbor_fc] = current_fc
+                heapq.heappush(pq, (f_score[neighbor_fc], neighbor_fc))
+    
+    # Reconstruct path
+    if g_score[end_fc] == float('inf'):
+        return None
+        
+    path = []
+    current = end_fc
+    while current is not None:
+        path.append(current)
+        current = previous[current]
+    
+    path.reverse()
+    return path
+
 def dijkstra_shortest_path(state: GameState, start_fc: str, end_fc: str) -> Optional[List[str]]:
     """
     Find the shortest path from start_fc to end_fc using Dijkstra's algorithm.
@@ -387,13 +547,21 @@ def route_package(state: GameState, package: Package) -> Optional[str]:
     
     # Check if we have capacity constraints
     if has_capacity_constraints(state):
-        # Use min cost max flow for optimal routing with capacity constraints
-        active_packages = [pkg for pkg in state.active_packages 
-                          if pkg.current_fc != pkg.destination_fc and not pkg.in_transit]
+        # Use BFS for capacity-aware routing with fewest hops
+        start_fc = package.current_fc
+        destination_fc = package.destination_fc
         
-        if active_packages:
-            optimal_routing = get_optimal_routing(state, active_packages)
-            return optimal_routing.get(package.id)
+        # Find the path with the fewest hops, respecting available capacity
+        shortest_path_hops = bfs_fewest_hops_path(state, start_fc, destination_fc)
+        
+        if shortest_path_hops is None or len(shortest_path_hops) < 2:
+            # No available path found (all roads full or no connection exists)
+            # Stay at the current FC and wait for capacity to free up
+            return None
+        
+        # The next FC is the second element in the list: [start_fc, next_fc, ..., end_fc]
+        next_fc_id = shortest_path_hops[1]
+        return next_fc_id
     
     # Fall back to Dijkstra's algorithm for shortest path routing
     available_connections = get_available_connections(state, package.current_fc)
@@ -414,8 +582,8 @@ def route_package(state: GameState, package: Package) -> Optional[str]:
         if next_fc == package.destination_fc:
             return next_fc
         
-        # Calculate path from this FC to destination
-        path = dijkstra_shortest_path(state, next_fc, package.destination_fc)
+        # Calculate path from this FC to destination using A* for better performance
+        path = astar_shortest_path(state, next_fc, package.destination_fc)
         
         if path is not None:
             # Calculate total path length

@@ -34,7 +34,12 @@ def dijkstra_shortest_path(state: GameState, start_fc: str, end_fc: str) -> Opti
         graph[fc.id] = []
     
     for conn in state.connections:
-        graph[conn.from_fc].append((conn.to_fc, conn.weight))
+        if conn.from_fc in graph:
+            graph[conn.from_fc].append((conn.to_fc, conn.weight))
+    
+    # Check if start and end FCs exist in the graph
+    if start_fc not in graph or end_fc not in graph:
+        return None
     
     # Dijkstra's algorithm
     distances = {fc_id: float('inf') for fc_id in graph}
@@ -57,7 +62,7 @@ def dijkstra_shortest_path(state: GameState, start_fc: str, end_fc: str) -> Opti
             break
             
         for neighbor_fc, weight in graph[current_fc]:
-            if neighbor_fc in visited:
+            if neighbor_fc in visited or neighbor_fc not in graph:
                 continue
                 
             new_dist = current_dist + weight
@@ -136,47 +141,42 @@ def route_package(state: GameState, package: Package) -> Optional[str]:
     if package.current_fc == package.destination_fc:
         return None
     
-    # Find shortest path to destination
-    shortest_path = dijkstra_shortest_path(state, package.current_fc, package.destination_fc)
+    # Get all available connections from current FC
+    available_connections = get_available_connections(state, package.current_fc)
     
-    if shortest_path is None or len(shortest_path) < 2:
+    if not available_connections:
         return None
     
-    # The next step in the shortest path
-    next_fc = shortest_path[1]
+    # Find the best next step
+    best_next_fc = None
+    best_score = float('inf')
     
-    # Check if this move is valid (considering bandwidth constraints)
-    if not is_valid_move(state, package, next_fc):
-        # If direct path is blocked, try alternative paths
-        available_connections = get_available_connections(state, package.current_fc)
-        
-        if not available_connections:
-            return None
-        
-        # Find alternative path that avoids congestion
-        best_alternative = None
-        best_score = float('inf')
-        
-        for alt_fc, weight in available_connections:
-            # Calculate path through this alternative
-            alt_path = dijkstra_shortest_path(state, alt_fc, package.destination_fc)
+    for next_fc, weight in available_connections:
+        # Check if this move is valid
+        if not is_valid_move(state, package, next_fc):
+            continue
             
-            if alt_path is not None:
-                # Total path length through alternative
-                total_length = weight + sum(
-                    state.get_connection(alt_path[i], alt_path[i+1]).weight 
-                    for i in range(len(alt_path) - 1)
-                    if state.get_connection(alt_path[i], alt_path[i+1]) is not None
-                )
-                
-                # Add congestion penalty
-                congestion_penalty = calculate_congestion_penalty(state, alt_fc)
-                score = total_length + congestion_penalty
-                
-                if score < best_score:
-                    best_score = score
-                    best_alternative = alt_fc
+        # If this is the destination, go there immediately
+        if next_fc == package.destination_fc:
+            return next_fc
         
-        return best_alternative
+        # Calculate path from this FC to destination
+        path = dijkstra_shortest_path(state, next_fc, package.destination_fc)
+        
+        if path is not None:
+            # Calculate total path length
+            total_length = weight
+            for i in range(len(path) - 1):
+                conn = state.get_connection(path[i], path[i+1])
+                if conn is not None:
+                    total_length += conn.weight
+            
+            # Add congestion penalty
+            congestion_penalty = calculate_congestion_penalty(state, next_fc)
+            score = total_length + congestion_penalty
+            
+            if score < best_score:
+                best_score = score
+                best_next_fc = next_fc
     
-    return next_fc
+    return best_next_fc
